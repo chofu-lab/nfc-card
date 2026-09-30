@@ -6533,6 +6533,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C25076"
+			(at 29.21 128.778 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "Datasheet" "~"
 			(at 29.21 127 0)
 			(effects
@@ -8086,7 +8095,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C1639"
+		(property "LCSC" "C1552"
 			(at 49.53 49.53 0)
 			(effects
 				(font

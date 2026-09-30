@@ -1,0 +1,12 @@
+*-backups/
+*.kicad_prl
+*.kicad_sch-bak
+*.kicad_pcb-bak
+fp-info-cache
+_autosave-*
+.DS_Store
+.history/
+*.lck
+__pycache__/
+# 記事用の作業素材（公開しない）
+docs/screenshots/
