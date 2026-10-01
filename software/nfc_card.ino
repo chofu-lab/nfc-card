@@ -65,6 +65,12 @@ bool morseEngineInitialized = false;
 
 
 void setup() {
+  // light the power LED right away: a background read from the iPhone home screen (no app)
+  // keeps the NFC field on for only about 0.1 s, so in that case this is the only LED that lights up
+  pinMode(powerLedPin, OUTPUT);
+  analogWrite(powerLedPin, 127);
+
+
   // in-rush prevention
   delay(300);
 
@@ -74,9 +80,6 @@ void setup() {
   digitalWrite(powerBypassPin, LOW);
 
 
-  // enable power LED
-  pinMode(powerLedPin, OUTPUT);
-  analogWrite(powerLedPin, 0);
  
   // pre-calculate hardware bitmasks
   for (int i = 0; i < 20; i++) {
@@ -102,9 +105,6 @@ void setup() {
     if (blankingDelay > 0) {
       delayMicroseconds(blankingDelay);
     }
-   
-    uint8_t powerFade = (elapsed * 127) / 300;
-    analogWrite(powerLedPin, powerFade);
   }
 
 

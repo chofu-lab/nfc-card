@@ -5,7 +5,7 @@
   <img src="docs/images/board-bottom.png" width="49%" alt="裏面（KiCad の 3D ビュー）">
 </p>
 
-調布組込みラボの名刺用の基板です。電池はありません。スマホをかざすと、NFC の電波から取り出した電力でマイコンが起動し、外周の LED が光ります。
+調布組込みラボの名刺用の基板です。電池はありません。スマホをかざすと、NFC の電波から取り出した電力でマイコンが起動し、外周の LED が光ります（Android の場合。iPhone はホーム画面での読み取りだと一瞬で終わるので、黄色の電源 LED が一瞬光ります）。
 
 Wilson Harper さんの [WiHarper/nfc_card](https://github.com/WiHarper/nfc_card) をフォークし、シルク（ロゴ・文字・QR コード）を差し替え、JLCPCB で部品実装まで発注できるよう BOM を直したものです。回路・アンテナ・部品配置・配線は元の設計のままです。
 
@@ -13,15 +13,16 @@ Wilson Harper さんの [WiHarper/nfc_card](https://github.com/WiHarper/nfc_card
 
 ## 出典
 
-- 元リポジトリ: [WiHarper/nfc_card](https://github.com/WiHarper/nfc_card)（commit `752793d`。このリポジトリはそのフォークで、元の履歴の上にこちらの変更を 1 コミットで載せています）
+- 元リポジトリ: [WiHarper/nfc_card](https://github.com/WiHarper/nfc_card)（commit `752793d`。このリポジトリはそのフォークで、元の履歴の上にこちらの変更を載せています。変更点は [`docs/CHANGES.md`](docs/CHANGES.md) にあります）
 - 作者による解説: [wilsonharper.net/projects/businesscard](https://wilsonharper.net/projects/businesscard/)
 
 回路・アンテナ・ファームウェアは元作者の設計です。公開してくださったことに感謝します。
 
 ## 状態
 
-- 2026 年 9 月に JLCPCB へ 30 枚（部品実装込み）を発注済み。実機での動作確認はこれから
-- 共振周波数の実測や iPhone / Android での読み取りの様子は、確認できしだい追記します
+- 2026 年 9 月に JLCPCB へ 30 枚（部品実装込み）を発注し、届いた基板で確認しています
+- 1 枚目で動作を確認済み（2026-10-01）: Android は NFC をオンにしてかざしている間、LED が回り続けます。iPhone 17 はホーム画面での読み取り（アプリなし）だと電波が約 0.1 秒で切れるので、黄色の電源 LED が一瞬光り、NFC に書いた URL の通知が出ます。iPhone でも、アプリで読み出しを続ければ（NFC Tools の高度なコマンドで READ を 2,500 回）約 14 秒光ります
+- 共振周波数の実測は、確認できしだい追記します
 
 ## 構成（元の設計と同じ）
 
@@ -41,7 +42,8 @@ Wilson Harper さんの [WiHarper/nfc_card](https://github.com/WiHarper/nfc_card
 - **文字はフォントの輪郭で描画**: KiCad の標準フォント（一筆書き）ではなく、フォントの輪郭を多角形にして配置（`scripts/text2json.py`）
 - **C1 の部品番号を修正**: 元の設計では 0402 サイズのフットプリントに 0603 サイズの LCSC 番号（C1639）が入っており、JLCPCB の実装審査で指摘されました。同じシリーズの 0402 品（C1552、1.5pF C0G）に変更
 - **R4 に LCSC 番号を追加**（C25076。元の設計では空欄）。C1・R4 とも、回路図・基板ファイル・BOM のすべてで直しています
-- **ファームウェアのモールス信号を変更**: 電源 LED が起動の 10 秒後から点滅させる文字列を、元の作者のサイト名 "WILSONHARPER.NET" から "CHOFU-LAB.COM" に変更。それ以外の動作は元のまま
+- **ファームウェアのモールス信号を変更**: 電源 LED が起動の 10 秒後から点滅させる文字列を、元の作者のサイト名 "WILSONHARPER.NET" から "CHOFU-LAB.COM" に変更
+- **電源 LED（黄）を起動直後に点灯**: iPhone のホーム画面での読み取り（アプリなし）は電波が約 0.1 秒で切れるため（iPhone 17 で確認）、元の設計（0.3 秒待ってから 0.3 秒かけて点灯）では何も光らなかった。黄色だけマイコンの起動後すぐに点けて、iPhone でも一瞬光るようにした。赤の LED の演出は元のまま
 - **JLCPCB 用の製造データを追加**（`hardware/fab/`）
 - **基板ファイルを KiCad 10 で保存**（`.kicad_pcb` は KiCad 9 では開けません。回路図は KiCad 9 形式のまま）
 
@@ -53,7 +55,7 @@ Wilson Harper さんの [WiHarper/nfc_card](https://github.com/WiHarper/nfc_card
 |---|---|
 | `hardware/` | KiCad のプロジェクト（回路図・基板・部品ライブラリ）。基板は KiCad 10 形式 |
 | `hardware/fab/` | 製造データ（ガーバー、JLCPCB 用 BOM・部品配置） |
-| `software/` | ファームウェア `nfc_card.ino`（モールス信号の文字列だけ変更）と、アンテナを描く KiCad 用スクリプト `coil.py`（元の設計のまま） |
+| `software/` | ファームウェア `nfc_card.ino`（モールス信号の文字列と電源 LED の点灯タイミングを変更）、ビルドに使うライブラリ（megaTinyCore・AVR-LibC）のライセンス表示 `THIRD_PARTY_NOTICES.md`（megaTinyCore のライセンス全文は `LICENSE-megaTinyCore.md`）、アンテナを描く KiCad 用スクリプト `coil.py`（元の設計のまま） |
 | `scripts/` | シルクを差し替えるスクリプト |
 | `artwork/` | シルクの素材（ロゴ・キャラクター・文字の輪郭データ） |
 
@@ -103,8 +105,10 @@ $PY ../scripts/hide_refs.py
 
 元の設計と同じライセンスです。この基板の設計データ一式の置き場所（CERN-OHL-S の Source Location）は、このリポジトリ https://github.com/chofu-lab/nfc-card です。
 
-- `hardware/`・`artwork/`: [CERN-OHL-S v2](https://ohwr.org/cern_ohl_s_v2.txt)
+- `hardware/`・`artwork/`・`docs/`: [CERN-OHL-S v2](https://ohwr.org/cern_ohl_s_v2.txt)
 - `software/`・`scripts/`: [GPL-3.0-or-later](https://www.gnu.org/licenses/gpl-3.0.html)
+
+基板に書き込むファームウェアには、megaTinyCore（LGPL 2.1）と AVR-LibC（修正 BSD ライセンス）の一部が含まれます。著作権表示とライセンスの全文は [`software/THIRD_PARTY_NOTICES.md`](software/THIRD_PARTY_NOTICES.md) にあります。配った基板のファームウェアのソースコード（ビルドに使った megaTinyCore のソースを含む）は、基板をお渡ししてから少なくとも 3 年間、このリポジトリから無料で入手できるようにしておきます。
 
 「調布組込みラボ」の名称・ロゴ・キャラクター「ちょふまる」は、標章としての利用を許諾していません。この設計をもとに名刺を作る場合は、ご自身のデザインに差し替えてください。詳しくは [`LICENSE.md`](LICENSE.md) を参照してください。
 
@@ -112,7 +116,7 @@ $PY ../scripts/hide_refs.py
 
 ## English
 
-A business-card PCB for Chofu Embedded Lab (Tokyo, Japan). It has no battery: when you hold a phone near it, the NFC chip harvests energy from the field, wakes up an ATtiny816, and the LEDs around the edge light up.
+A business-card PCB for Chofu Embedded Lab (Tokyo, Japan). It has no battery: when you hold a phone near it, the NFC chip harvests energy from the field, wakes up an ATtiny816, and the LEDs around the edge light up (on Android; when an iPhone reads it from the home screen, the read ends almost at once, so only the yellow power LED blinks).
 
 This is a fork of [WiHarper/nfc_card](https://github.com/WiHarper/nfc_card) by Wilson Harper. The circuit, antenna, placement, and routing are unchanged. What changed:
 
@@ -120,12 +124,13 @@ This is a fork of [WiHarper/nfc_card](https://github.com/WiHarper/nfc_card) by W
 - C1 LCSC part number fixed: the original BOM had C1639 (0603) on a 0402 footprint; replaced with C1552 (0402, 1.5 pF C0G)
 - Added the missing LCSC number for R4 (C25076)
 - The lightning mark next to the power LED was unintentionally removed during the silkscreen replacement (it is also missing on the boards we ordered)
-- Firmware: the Morse code blinked by the power LED now spells "CHOFU-LAB.COM" instead of "WILSONHARPER.NET". Nothing else in the firmware is changed
+- Firmware: the Morse code blinked by the power LED now spells "CHOFU-LAB.COM" instead of "WILSONHARPER.NET"
+- Firmware: the yellow power LED now turns on as soon as the MCU starts. A background NFC read from the iPhone home screen (no app) keeps the field on for only about 0.1 s (checked on an iPhone 17), so with the original 0.3 s delay plus 0.3 s fade-in nothing lit up on an iPhone. The start-up animation of the red LEDs is unchanged
 - JLCPCB-ready fabrication files in `hardware/fab/`
 - The board file is saved with KiCad 10 (it will not open in KiCad 9). The schematic is still in KiCad 9 format
 
-Status: 30 boards were ordered from JLCPCB in September 2026, and they have not been tested yet. Measurements of the antenna resonance and phone behavior will be added later.
+Status: 30 boards were ordered from JLCPCB in September 2026 and have been delivered. Checked on the first board (2026-10-01): on Android the LEDs keep running while the phone is held near the card; on an iPhone 17 a home-screen read shows the URL notification and only the yellow LED blinks. With an app that keeps reading the tag (2,500 READ commands in NFC Tools), the card stays lit for about 14 s. Antenna resonance measurements will be added later.
 
 Source location of this design: https://github.com/chofu-lab/nfc-card
 
-License: same as the original, CERN-OHL-S v2 for `hardware/` and `artwork/`, and GPL-3.0-or-later for `software/` and `scripts/`. The Chofu Embedded Lab name, logo, and character are not licensed for use as marks. Please replace them with your own artwork. See [`LICENSE.md`](LICENSE.md).
+License: same as the original, CERN-OHL-S v2 for `hardware/`, `artwork/`, and `docs/`, and GPL-3.0-or-later for `software/` and `scripts/`. The firmware includes parts of megaTinyCore (LGPL 2.1) and AVR-LibC (modified BSD); see [`software/THIRD_PARTY_NOTICES.md`](software/THIRD_PARTY_NOTICES.md). The source of the firmware on the boards we hand out (including the megaTinyCore source used to build it) stays available here free of charge for at least three years after we hand out a board. The Chofu Embedded Lab name, logo, and character are not licensed for use as marks. Please replace them with your own artwork. See [`LICENSE.md`](LICENSE.md).
