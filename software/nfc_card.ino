@@ -40,23 +40,21 @@ struct MorseElement {
   uint8_t units;
 };
 
+// "CHOFU-LAB.COM" in Morse code
 const MorseElement morseSequence[] = {
-  {true, 1}, {false, 1}, {true, 3}, {false, 1}, {true, 3}, {false, 3},
-  {true, 1}, {false, 1}, {true, 1}, {false, 3},
-  {true, 1}, {false, 1}, {true, 3}, {false, 1}, {true, 1}, {false, 1}, {true, 1}, {false, 3},
-  {true, 1}, {false, 1}, {true, 1}, {false, 1}, {true, 1}, {false, 3},
-  {true, 3}, {false, 1}, {true, 3}, {false, 1}, {true, 3}, {false, 3},
-  {true, 3}, {false, 1}, {true, 1}, {false, 3},
+  {true, 3}, {false, 1}, {true, 1}, {false, 1}, {true, 3}, {false, 1}, {true, 1}, {false, 3},
   {true, 1}, {false, 1}, {true, 1}, {false, 1}, {true, 1}, {false, 1}, {true, 1}, {false, 3},
+  {true, 3}, {false, 1}, {true, 3}, {false, 1}, {true, 3}, {false, 3},
+  {true, 1}, {false, 1}, {true, 1}, {false, 1}, {true, 3}, {false, 1}, {true, 1}, {false, 3},
+  {true, 1}, {false, 1}, {true, 1}, {false, 1}, {true, 3}, {false, 3},
+  {true, 3}, {false, 1}, {true, 1}, {false, 1}, {true, 1}, {false, 1}, {true, 1}, {false, 1}, {true, 1}, {false, 1}, {true, 3}, {false, 3},
+  {true, 1}, {false, 1}, {true, 3}, {false, 1}, {true, 1}, {false, 1}, {true, 1}, {false, 3},
   {true, 1}, {false, 1}, {true, 3}, {false, 3},
-  {true, 1}, {false, 1}, {true, 3}, {false, 1}, {true, 1}, {false, 3},
-  {true, 1}, {false, 1}, {true, 3}, {false, 1}, {true, 3}, {false, 1}, {true, 1}, {false, 3},
-  {true, 1}, {false, 3},
-  {true, 1}, {false, 1}, {true, 3}, {false, 1}, {true, 1}, {false, 3},
+  {true, 3}, {false, 1}, {true, 1}, {false, 1}, {true, 1}, {false, 1}, {true, 1}, {false, 3},
   {true, 1}, {false, 1}, {true, 3}, {false, 1}, {true, 1}, {false, 1}, {true, 3}, {false, 1}, {true, 1}, {false, 1}, {true, 3}, {false, 3},
-  {true, 3}, {false, 1}, {true, 1}, {false, 3},
-  {true, 1}, {false, 3},
-  {true, 3}, {false, 7}
+  {true, 3}, {false, 1}, {true, 1}, {false, 1}, {true, 3}, {false, 1}, {true, 1}, {false, 3},
+  {true, 3}, {false, 1}, {true, 3}, {false, 1}, {true, 3}, {false, 3},
+  {true, 3}, {false, 1}, {true, 3}, {false, 7}
 };
 
 

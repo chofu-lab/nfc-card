@@ -44,3 +44,7 @@ CERN-OHL-S v2 の 3.3(b) に基づき、元の設計からの変更点を記録�
   - 基板ファイル内の部品情報を回路図に合わせた（C1 の LCSC 欄を C1639 → C1552、R4 に LCSC 欄 C25076 を追加。非表示のフィールドだけで、ガーバーは全層変わらないことを確認）
   - `artwork/`・`docs/`・`scripts/` のライセンス、この設計の置き場所（Source Location）、ロゴ・キャラクターの扱いを `LICENSE.md` に追記
   - README の画像（`docs/images/`、KiCad の 3D ビュー）を追加
+
+## 2026-10-01
+
+- ファームウェア（`software/nfc_card.ino`）: 電源 LED（LED22）が起動の 10 秒後から点滅させるモールス信号の文字列を、元の作者のサイト名 "WILSONHARPER.NET" から "CHOFU-LAB.COM" に変更。変えたのは `morseSequence` の配列だけで、符号の長さ・間隔の決め方（短点 1・長点 3・符号間 1・文字間 3・最後に 7 単位、1 単位 170 ms）は元のまま

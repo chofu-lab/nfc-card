@@ -41,6 +41,7 @@ Wilson Harper さんの [WiHarper/nfc_card](https://github.com/WiHarper/nfc_card
 - **文字はフォントの輪郭で描画**: KiCad の標準フォント（一筆書き）ではなく、フォントの輪郭を多角形にして配置（`scripts/text2json.py`）
 - **C1 の部品番号を修正**: 元の設計では 0402 サイズのフットプリントに 0603 サイズの LCSC 番号（C1639）が入っており、JLCPCB の実装審査で指摘されました。同じシリーズの 0402 品（C1552、1.5pF C0G）に変更
 - **R4 に LCSC 番号を追加**（C25076。元の設計では空欄）。C1・R4 とも、回路図・基板ファイル・BOM のすべてで直しています
+- **ファームウェアのモールス信号を変更**: 電源 LED が起動の 10 秒後から点滅させる文字列を、元の作者のサイト名 "WILSONHARPER.NET" から "CHOFU-LAB.COM" に変更。それ以外の動作は元のまま
 - **JLCPCB 用の製造データを追加**（`hardware/fab/`）
 - **基板ファイルを KiCad 10 で保存**（`.kicad_pcb` は KiCad 9 では開けません。回路図は KiCad 9 形式のまま）
 
@@ -52,7 +53,7 @@ Wilson Harper さんの [WiHarper/nfc_card](https://github.com/WiHarper/nfc_card
 |---|---|
 | `hardware/` | KiCad のプロジェクト（回路図・基板・部品ライブラリ）。基板は KiCad 10 形式 |
 | `hardware/fab/` | 製造データ（ガーバー、JLCPCB 用 BOM・部品配置） |
-| `software/` | ファームウェア `nfc_card.ino` と、アンテナを描く KiCad 用スクリプト `coil.py`（元の設計のまま） |
+| `software/` | ファームウェア `nfc_card.ino`（モールス信号の文字列だけ変更）と、アンテナを描く KiCad 用スクリプト `coil.py`（元の設計のまま） |
 | `scripts/` | シルクを差し替えるスクリプト |
 | `artwork/` | シルクの素材（ロゴ・キャラクター・文字の輪郭データ） |
 
@@ -119,6 +120,7 @@ This is a fork of [WiHarper/nfc_card](https://github.com/WiHarper/nfc_card) by W
 - C1 LCSC part number fixed: the original BOM had C1639 (0603) on a 0402 footprint; replaced with C1552 (0402, 1.5 pF C0G)
 - Added the missing LCSC number for R4 (C25076)
 - The lightning mark next to the power LED was unintentionally removed during the silkscreen replacement (it is also missing on the boards we ordered)
+- Firmware: the Morse code blinked by the power LED now spells "CHOFU-LAB.COM" instead of "WILSONHARPER.NET". Nothing else in the firmware is changed
 - JLCPCB-ready fabrication files in `hardware/fab/`
 - The board file is saved with KiCad 10 (it will not open in KiCad 9). The schematic is still in KiCad 9 format
 
