@@ -21,7 +21,7 @@ Wilson Harper さんの [WiHarper/nfc_card](https://github.com/WiHarper/nfc_card
 ## 状態
 
 - 2026 年 9 月に JLCPCB へ 30 枚（部品実装込み）を発注し、届いた基板で確認しています
-- 1 枚目で動作を確認済み（2026-10-01）: Android は NFC をオンにしてかざしている間、LED が回り続けます。iPhone 17 はホーム画面での読み取り（アプリなし）だと電波が約 0.1 秒で切れるので、黄色の電源 LED が一瞬光り、NFC に書いた URL の通知が出ます。iPhone でも、アプリで読み出しを続ければ（NFC Tools の高度なコマンドで READ を 2,500 回）約 14 秒光ります
+- 1 枚目で動作を確認済み（2026-10-01〜02）: Android は NFC をオンにしてかざしている間、LED が光り続けます（9 種類のパターンを 6 秒ずつ順番に）。iPhone 17 はホーム画面での読み取り（アプリなし）だと電波が約 0.1 秒で切れるので、黄色の電源 LED が一瞬光り、NFC に書いた URL の通知が出ます。iPhone でも、アプリで読み出しを続ければ（NFC Tools の高度なコマンドで READ を 2,500 回）約 14 秒光ります
 - 共振周波数の実測は、確認できしだい追記します
 
 ## 構成（元の設計と同じ）
@@ -42,8 +42,9 @@ Wilson Harper さんの [WiHarper/nfc_card](https://github.com/WiHarper/nfc_card
 - **文字はフォントの輪郭で描画**: KiCad の標準フォント（一筆書き）ではなく、フォントの輪郭を多角形にして配置（`scripts/text2json.py`）
 - **C1 の部品番号を修正**: 元の設計では 0402 サイズのフットプリントに 0603 サイズの LCSC 番号（C1639）が入っており、JLCPCB の実装審査で指摘されました。同じシリーズの 0402 品（C1552、1.5pF C0G）に変更
 - **R4 に LCSC 番号を追加**（C25076。元の設計では空欄）。C1・R4 とも、回路図・基板ファイル・BOM のすべてで直しています
-- **ファームウェアのモールス信号を変更**: 電源 LED が起動の 10 秒後から点滅させる文字列を、元の作者のサイト名 "WILSONHARPER.NET" から "CHOFU-LAB.COM" に変更
-- **電源 LED（黄）を起動直後に点灯**: iPhone のホーム画面での読み取り（アプリなし）は電波が約 0.1 秒で切れるため（iPhone 17 で確認）、元の設計（0.3 秒待ってから 0.3 秒かけて点灯）では何も光らなかった。黄色だけマイコンの起動後すぐに点けて、iPhone でも一瞬光るようにした。赤の LED の演出は元のまま
+- **ファームウェアの光り方を変更**: 外周の赤 LED を、9 種類のパターン（元の彗星・双子の彗星・スピナー・すれ違い・交互点灯・満ちて引く・積み上げ・きらめき・チャージ）を 6 秒ずつ順番に流す形にした。元のファームウェアの小さな遊びだったモールス信号はやめた。起動時の演出（0.3 秒待ってから 0.3 秒かけて明るくなる）は元のまま
+- **電源 LED（黄）を起動直後に点灯**: iPhone のホーム画面での読み取り（アプリなし）は電波が約 0.1 秒で切れるため（iPhone 17 で確認）、元の設計（0.3 秒待ってから 0.3 秒かけて点灯）では何も光らなかった。黄色だけマイコンの起動後すぐに点けて、iPhone でも一瞬光るようにした。そのあとは、パターンが切り替わるたびに光って 0.5 秒で消える
+- **描画の周期を 6 ms に固定し、待つ間はマイコンをスリープ**: LED 1 個あたりの明るさと電流は元の設計と同じ。全部の LED が点く場面では赤の合計電流が増えるが、スリープと黄色の消灯で、基板全体の平均電流は元の設計より少ない見込み（シミュレーションによる推定）
 - **JLCPCB 用の製造データを追加**（`hardware/fab/`）
 - **基板ファイルを KiCad 10 で保存**（`.kicad_pcb` は KiCad 9 では開けません。回路図は KiCad 9 形式のまま）
 
@@ -55,7 +56,7 @@ Wilson Harper さんの [WiHarper/nfc_card](https://github.com/WiHarper/nfc_card
 |---|---|
 | `hardware/` | KiCad のプロジェクト（回路図・基板・部品ライブラリ）。基板は KiCad 10 形式 |
 | `hardware/fab/` | 製造データ（ガーバー、JLCPCB 用 BOM・部品配置） |
-| `software/` | ファームウェア `nfc_card.ino`（モールス信号の文字列と電源 LED の点灯タイミングを変更）、ビルドに使うライブラリ（megaTinyCore・AVR-LibC）のライセンス表示 `THIRD_PARTY_NOTICES.md`（megaTinyCore のライセンス全文は `LICENSE-megaTinyCore.md`）、アンテナを描く KiCad 用スクリプト `coil.py`（元の設計のまま） |
+| `software/` | ファームウェア `nfc_card.ino`（光り方のパターンと電源 LED の動きを変更）、ビルドに使うライブラリ（megaTinyCore・AVR-LibC）のライセンス表示 `THIRD_PARTY_NOTICES.md`（megaTinyCore のライセンス全文は `LICENSE-megaTinyCore.md`）、アンテナを描く KiCad 用スクリプト `coil.py`（元の設計のまま） |
 | `scripts/` | シルクを差し替えるスクリプト |
 | `artwork/` | シルクの素材（ロゴ・キャラクター・文字の輪郭データ） |
 
@@ -78,7 +79,9 @@ KiCad が出力した BOM・部品配置ファイルは、そのままでは JLC
 
 ## 書き込み
 
-元の設計と同じです。ATtiny816 には裏面のパッドから UPDI で書き込みます（クロックは 1 MHz）。NFC チップへの vCard や URL の書き込みには [NXP TagWriter](https://play.google.com/store/apps/details?id=com.nxp.nfc.tagwriter) を使います。元の作者によると、エネルギーハーベストは初期状態で有効です。
+ATtiny816 には裏面のパッドから UPDI で書き込みます（クロックは 1 MHz）。ビルドの方法は [`software/THIRD_PARTY_NOTICES.md`](software/THIRD_PARTY_NOTICES.md) にあります。何枚も続けて書くときは、[`software/flash_cards.sh`](software/flash_cards.sh)（macOS、SerialUPDI のアダプタを使用）で「基板をクリップではさむ → Enter」をくり返せます。NFC チップの電源の上限は 3.6V なので、アダプタの電源は 3.3V にしてください（5V にしない）。
+
+NFC チップ（NTAG I2C plus）は出荷時に初期化されていない（CC が 0）ため、iPhone からは書き込めず、Android の NXP TagWriter でもうまく書けないことがありました。Android の「NTAG I2C Demoboard」アプリ（NXP）の Config →「Reset tag」で初期化してから、URL や vCard を書きます。初期化のあとは iPhone の NFC TagWriter でも書けます。元の作者によると、エネルギーハーベストは初期状態で有効です。
 
 ## シルクを作り直すとき
 
@@ -124,12 +127,13 @@ This is a fork of [WiHarper/nfc_card](https://github.com/WiHarper/nfc_card) by W
 - C1 LCSC part number fixed: the original BOM had C1639 (0603) on a 0402 footprint; replaced with C1552 (0402, 1.5 pF C0G)
 - Added the missing LCSC number for R4 (C25076)
 - The lightning mark next to the power LED was unintentionally removed during the silkscreen replacement (it is also missing on the boards we ordered)
-- Firmware: the Morse code blinked by the power LED now spells "CHOFU-LAB.COM" instead of "WILSONHARPER.NET"
-- Firmware: the yellow power LED now turns on as soon as the MCU starts. A background NFC read from the iPhone home screen (no app) keeps the field on for only about 0.1 s (checked on an iPhone 17), so with the original 0.3 s delay plus 0.3 s fade-in nothing lit up on an iPhone. The start-up animation of the red LEDs is unchanged
+- Firmware: the red LEDs now play nine patterns for 6 s each (the original comet, twin comets, spinner, crossing, alternating, fill, stack, twinkle, and charge). The Morse code easter egg is gone. The start-up animation (0.3 s wait and 0.3 s fade-in) is unchanged
+- Firmware: the yellow power LED now turns on as soon as the MCU starts. A background NFC read from the iPhone home screen (no app) keeps the field on for only about 0.1 s (checked on an iPhone 17), so with the original 0.3 s delay plus 0.3 s fade-in nothing lit up on an iPhone. After that it flashes and fades out over 0.5 s at each pattern change
+- Firmware: each frame is fixed at 6 ms with the CPU sleeping in between, so one LED is as bright and draws as much current as in the original firmware. The total red current grows when many LEDs are lit, but the estimated average current of the whole board is lower than the original (simulation)
 - JLCPCB-ready fabrication files in `hardware/fab/`
 - The board file is saved with KiCad 10 (it will not open in KiCad 9). The schematic is still in KiCad 9 format
 
-Status: 30 boards were ordered from JLCPCB in September 2026 and have been delivered. Checked on the first board (2026-10-01): on Android the LEDs keep running while the phone is held near the card; on an iPhone 17 a home-screen read shows the URL notification and only the yellow LED blinks. With an app that keeps reading the tag (2,500 READ commands in NFC Tools), the card stays lit for about 14 s. Antenna resonance measurements will be added later.
+Status: 30 boards were ordered from JLCPCB in September 2026 and have been delivered. Checked on the first board (2026-10-01 to 02): on Android the LEDs keep playing the patterns while the phone is held near the card; on an iPhone 17 a home-screen read shows the URL notification and only the yellow LED blinks. With an app that keeps reading the tag (2,500 READ commands in NFC Tools), the card stays lit for about 14 s. Antenna resonance measurements will be added later.
 
 Source location of this design: https://github.com/chofu-lab/nfc-card
 

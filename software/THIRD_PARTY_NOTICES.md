@@ -6,8 +6,8 @@ The firmware `nfc_card.ino` is built with the libraries below. These notices acc
 
 ## 配った基板のファームウェア（Distributed firmware）
 
-- タグ `firmware-1` の `software/nfc_card.ino` をビルドしたもの（ファームウェアを変えたときは、新しいタグを打ってここに追記します）
-- Built from `software/nfc_card.ino` at tag `firmware-1` (a new tag will be added here whenever the firmware changes).
+- タグ `firmware-2` の `software/nfc_card.ino` をビルドしたもの（`firmware-1` は配る前に差し替えた版です。ファームウェアを変えたときは、新しいタグを打ってここに追記します）
+- Built from `software/nfc_card.ino` at tag `firmware-2` (`firmware-1` was replaced before any boards were handed out; a new tag will be added here whenever the firmware changes).
 
 ## ビルドの方法（Build）
 
@@ -41,11 +41,11 @@ Copyright (c) 2018-2022, 2025 Spence Konde
 ```
 
 - ライセンスの全文: このフォルダの [`LICENSE-megaTinyCore.md`](LICENSE-megaTinyCore.md)（megaTinyCore 2.6.11 の LICENSE.md の写し。GNU LGPL 2.1 の全文を含みます）
-- ソースコード: https://github.com/SpenceKonde/megaTinyCore （タグ 2.6.11）。ビルドに使ったソース一式は、このリポジトリの Release `firmware-1` にも `megaTinyCore-2.6.11.tar.bz2`（SHA-256: `1a2b5827777aa4c61ac5d9e96cf4ad9ebb34a2171a97288349df8eb61636cfb1`）として添付しています
+- ソースコード: https://github.com/SpenceKonde/megaTinyCore （タグ 2.6.11）。ビルドに使ったソース一式は、このリポジトリの Release `firmware-2`（と `firmware-1`）にも `megaTinyCore-2.6.11.tar.bz2`（SHA-256: `1a2b5827777aa4c61ac5d9e96cf4ad9ebb34a2171a97288349df8eb61636cfb1`）として添付しています
 
 このフォルダの `nfc_card.ino`（GPL-3.0-or-later）と megaTinyCore のソースがあれば、上の方法で同じファームウェアをビルドでき、megaTinyCore を変更してから再リンクすることもできます。
 
-The firmware is statically linked with parts of megaTinyCore 2.6.11, licensed under the GNU LGPL 2.1 (full text in `LICENSE-megaTinyCore.md`). Together with `nfc_card.ino` in this folder and the megaTinyCore source (also attached to the release `firmware-1`), you can rebuild and relink the firmware.
+The firmware is statically linked with parts of megaTinyCore 2.6.11, licensed under the GNU LGPL 2.1 (full text in `LICENSE-megaTinyCore.md`). Together with `nfc_card.ino` in this folder and the megaTinyCore source (also attached to the releases `firmware-2` and `firmware-1`), you can rebuild and relink the firmware.
 
 ## AVR-LibC 2.0.0 — Modified BSD License
 
